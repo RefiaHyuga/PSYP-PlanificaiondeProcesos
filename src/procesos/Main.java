@@ -20,7 +20,7 @@ public class Main {
         a.sjf();
         a.srtf();
         a.roundrobin(2);
-    
     }
+    
     
 }

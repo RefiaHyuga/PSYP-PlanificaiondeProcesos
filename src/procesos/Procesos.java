@@ -15,8 +15,10 @@ public class Procesos {
      */
     private int llegada;
     private int ejecucion;
+    private int id;
 
-    public Procesos(int llegada, int ejecucion) {
+    public Procesos(int id, int llegada, int ejecucion) {
+        this.id = id;
         this.llegada = llegada;
         this.ejecucion = ejecucion;
     }
@@ -36,5 +38,14 @@ public class Procesos {
     public void setEjecucion(int ejecucion) {
         this.ejecucion = ejecucion;
     }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+    
          
 }

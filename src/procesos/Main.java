@@ -15,11 +15,15 @@ public class Main {
         
     public static void main(String[] args) {
         // TODO code application logic here
-        Algoritmos.fifo();
-        Algoritmos.sjf();
-        Algoritmos.srtf();
-        Algoritmos.roundrobin(2);
-        Logger.close();
+        try {
+            Algoritmos.fifo();
+            Algoritmos.sjf();
+            Algoritmos.srtf();
+            Algoritmos.roundrobin(2);
+        }
+        finally {
+            Logger.close();
+        }
     }
     
     

@@ -12,12 +12,12 @@ import java.util.ArrayList;
  */
 public class Algoritmos {
 
-    int np = 0;
-    Procesos p[];
-    int te = 0; //Tiempo de ejecucion total
-    int q = 2;
+    static int np = 0;
+    static Procesos p[];
+    static int te = 0; //Tiempo de ejecucion total
+    static int q = 2;
 
-    public Algoritmos() {
+    private static void setProcesos() {
         np = 5;
         p = new Procesos[np];
 
@@ -26,12 +26,12 @@ public class Algoritmos {
         p[2] = new Procesos(2, 2, 10);
         p[3] = new Procesos(3, 3, 1);
         p[4] = new Procesos(4, 4, 2);
-
     }
 
-    public void fifo() {
+    public static void fifo() {
+        setProcesos();
 
-        System.out.println("Algoritmo Fifo");
+        Logger.log("Algoritmo Fifo");
 
         Procesos paux[] = new Procesos[np];
         ArrayList<Integer> cola = new ArrayList<Integer>();
@@ -47,22 +47,23 @@ public class Algoritmos {
                     int e = paux[j].getEjecucion();
                     for (int k = 0; k < paux[j].getEjecucion(); k++) {
                         cola.add(j);
-                        //System.out.println(j); Para saber en que momento entran en cola
+                        //Logger.log(j); Para saber en que momento entran en cola
                         e--;
                     }
                     paux[j].setEjecucion(e);
                 }
 
             }
-            int proceso = cola.getFirst();
-            cola.removeFirst();
-            System.out.println("Tiempo -->" + i + "   Proceso-->" + proceso);
+            int proceso = cola.get(0);
+            cola.remove(0);
+            Logger.log("Tiempo --> " + i + "   Proceso--> " + proceso);
         }
     }
 
-    public void sjf() {
+    public static void sjf() {
+        setProcesos();
 
-        System.out.println("Algoritmo SJF");
+        Logger.log("Algoritmo SJF");
 
         Procesos paux[] = new Procesos[np];
         ArrayList<Integer> cola = new ArrayList<Integer>();
@@ -92,7 +93,7 @@ public class Algoritmos {
                         int e = paux[j].getEjecucion();
                         for (int k = 0; k < paux[j].getEjecucion(); k++) {
                             cola.add(paux[j].getId());
-                            //System.out.println(j); Para saber en que momento entran en cola
+                            //Logger.log(j); Para saber en que momento entran en cola
                             e--;
                         }
                         paux[j].setEjecucion(e);
@@ -100,23 +101,28 @@ public class Algoritmos {
 
                 }
             }
-            int proceso = cola.getFirst();
-            cola.removeFirst();
-            System.out.println("Tiempo -->" + i + "   Proceso-->" + proceso);
+
+            if (!cola.isEmpty()) {
+                int proceso = cola.get(0);
+                cola.remove(0);
+                Logger.log("Tiempo --> " + i + "   Proceso--> " + proceso);
+            }
         }
     }
 
-    public void srtf() {
-        System.out.println("Algoritmo SJF");
+    public static void srtf() {
+        setProcesos();
+        Logger.log("Algoritmo SJF");
 
         
     }
 
-    public void roundrobin(int q) {
+    public static void roundrobin(int quantum) {
+        setProcesos();
 
-        System.out.println("Algoritmo Round Robin");
+        Logger.log("Algoritmo Round Robin");
 
-        this.q = q;
+        q = quantum;
         ArrayList<Procesos> paux = new ArrayList<Procesos>();
         ArrayList<Integer> cola = new ArrayList<Integer>();
         
@@ -127,24 +133,25 @@ public class Algoritmos {
 
         for (int i = 0; i < te; i++) {
 
-            Procesos pro = paux.getFirst();
+            Procesos pro = paux.get(0);
             if (pro.getLlegada() <= i) {
                 int e = pro.getEjecucion();
-                for (int j = 0; j < q; j++) {
+                for (int j = 0; j < quantum; j++) {
                     if (e >= 0) {
                         cola.add(pro.getId());
                         e--;
                     }
                 }
                 pro.setEjecucion(e);
-                paux.removeFirst();
-                paux.addLast(pro);
+                paux.remove(0);
+                paux.add(pro);
             }
 
-            int proceso = cola.getFirst();
-            cola.removeFirst();
-            System.out.println("Tiempo -->" + i + "   Proceso-->" + proceso);
+            if (!cola.isEmpty()) {
+                int proceso = cola.get(0);
+                cola.remove(0);
+                Logger.log("Tiempo --> " + i + "   Proceso--> " + proceso);
+            }
         }
     }
-
 }

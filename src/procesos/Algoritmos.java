@@ -35,7 +35,7 @@ public class Algoritmos {
 
         Procesos paux[] = new Procesos[np];
         ArrayList<Integer> cola = new ArrayList<Integer>();
-        
+
         for (int i = 0; i < np; i++) {
             paux[i] = p[i];//Copiamos P a un Pauxiliar
             te = te + paux[i].getEjecucion();//Calculo el tiempo final
@@ -67,24 +67,13 @@ public class Algoritmos {
 
         Procesos paux[] = new Procesos[np];
         ArrayList<Integer> cola = new ArrayList<Integer>();
-        
+
         for (int i = 0; i < np; i++) {
             paux[i] = p[i];//Copiamos P a un Pauxiliar
             te = te + paux[i].getEjecucion();//Calculo el tiempo final
         }
 
-        //Algortimo burbuja
-        for (int i = 0; i < np - 1; i++) {
-            for (int j = 0; j < np - 1 - i; j++) {
-                // Si el elemento actual es mayor que el siguiente, se intercambian
-                if (paux[j].getEjecucion() > paux[j + 1].getEjecucion()) {
-                    // Intercambiar arr[j] y arr[j+1]
-                    Procesos temp = paux[j];
-                    paux[j] = paux[j + 1];
-                    paux[j + 1] = temp;
-                }
-            }
-        }
+        paux = ordenarTEjecucion(paux); // Algoritmo ordenarTEjecucion
 
         for (int i = 0; i < te; i++) {
             if (cola.isEmpty()) {
@@ -112,9 +101,42 @@ public class Algoritmos {
 
     public static void srtf() {
         setProcesos();
-        Logger.log("Algoritmo SJF");
+        Logger.log("Algoritmo SRTF");
 
-        
+        Procesos paux[] = new Procesos[np];
+        ArrayList<Integer> cola = new ArrayList<Integer>();
+
+        for (int i = 0; i < np; i++) {
+            paux[i] = p[i];//Copiamos P a un Pauxiliar
+            te = te + paux[i].getEjecucion();//Calculo el tiempo final
+        }
+
+        paux = ordenarTEjecucion(paux); // Algoritmo ordenarTEjecucion
+
+        for (int i = 0; i < te; i++) {
+            if (cola.isEmpty()) {
+                for (int j = 0; j < np; j++) {
+                    if (paux[j].getLlegada() <= i) {
+                        int e = paux[j].getEjecucion();
+                        if(paux[j].getEjecucion() > 0){
+                            cola.add(paux[j].getId());
+                            //Logger.log(j); Para saber en que momento entran en cola
+                            e--;
+                        }
+                        paux[j].setEjecucion(e);
+                        paux = ordenarTEjecucion(paux);
+                    }
+
+                }
+            }
+
+            if (!cola.isEmpty()) {
+                int proceso = cola.get(0);
+                cola.remove(0);
+                Logger.log("Tiempo --> " + i + "   Proceso--> " + proceso);
+            }
+        }
+
     }
 
     public static void roundrobin(int quantum) {
@@ -125,7 +147,7 @@ public class Algoritmos {
         q = quantum;
         ArrayList<Procesos> paux = new ArrayList<Procesos>();
         ArrayList<Integer> cola = new ArrayList<Integer>();
-        
+
         for (int i = 0; i < np; i++) {
             paux.add(p[i]);//Copiamos P a un Pauxiliar
             te = te + p[i].getEjecucion();//Calculo el tiempo final
@@ -154,4 +176,22 @@ public class Algoritmos {
             }
         }
     }
+
+    public static Procesos[] ordenarTEjecucion(Procesos[] p) {
+        //Ordenacion por Algoritmo burbuja
+        for (int i = 0; i < np - 1; i++) {
+            for (int j = 0; j < np - 1 - i; j++) {
+                // Si el elemento actual es mayor que el siguiente, se intercambian
+                if (p[j].getEjecucion() > p[j + 1].getEjecucion()) {
+                    // Intercambiar arr[j] y arr[j+1]
+                    Procesos temp = p[j];
+                    p[j] = p[j + 1];
+                    p[j + 1] = temp;
+                }
+            }
+        }
+
+        return p;
+    }
+
 }
